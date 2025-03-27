@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week_3_blabla_project/prividers/rides_pref_provider.dart';
+import 'package:week_3_blabla_project/ui/providers/async_value.dart';
+import 'package:week_3_blabla_project/ui/widgets/errors/bla_error_screen.dart';
 
 import '../../../model/ride/ride_pref.dart';
 import '../../theme/theme.dart';
@@ -24,7 +26,7 @@ class RidePrefScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final ridesPrefProvider = context.watch<RidesPrefProvider>();
     final currentRidePreference = ridesPrefProvider.currentPref;
-    final pastPreferences = ridesPrefProvider.preferenceHistory();
+    final pastPreferences = ridesPrefProvider.pastPreferences;
 
     onRidePrefSelected(RidePreference newPreference) async {
       // 1 - Update the current preference
@@ -69,18 +71,33 @@ class RidePrefScreen extends StatelessWidget {
 
                   // 2.2 Optionally display a list of past preferences
                   SizedBox(
-                    height: 200, // Set a fixed height
-                    child: ListView.builder(
-                      shrinkWrap: true, // Fix ListView height issue
-                      physics: AlwaysScrollableScrollPhysics(),
-                      itemCount: pastPreferences.length,
-                      itemBuilder: (ctx, index) => RidePrefHistoryTile(
-                        ridePref: pastPreferences[index],
-                        onPressed: () =>
-                            onRidePrefSelected(pastPreferences[index]),
-                      ),
-                    ),
-                  ),
+                      height: 200, // Set a fixed height
+                      child: Builder(builder: (BuildContext context) {
+                        switch (pastPreferences.state) {
+                          case AsyncValueState.loading:
+                            return BlaError(
+                                message: 'Loading'); // display a progress
+
+                          case AsyncValueState.error:
+                            return BlaError(
+                                message: 'No connection'); // display a error
+
+                          case AsyncValueState.success:
+                            final pastList = pastPreferences.data ?? [];
+                            return ListView.builder(
+                              shrinkWrap: true, // Fix ListView height issue
+                              physics: AlwaysScrollableScrollPhysics(),
+                              itemCount: pastList.length,
+                              itemBuilder: (ctx, index) => RidePrefHistoryTile(
+                                ridePref: pastList[index],
+                                onPressed: () =>
+                                    onRidePrefSelected(pastList[index]),
+                              ),
+                            ); // display the post
+                          case AsyncValueState.empty:
+                            return Text('No Post for now');
+                        }
+                      })),
                 ],
               ),
             ),
