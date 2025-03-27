@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:week_3_blabla_project/prividers/rides_pref_provider.dart';
+import 'package:week_3_blabla_project/ui/providers/rides_pref_provider.dart';
 import 'data/repository/mock/mock_locations_repository.dart';
 import 'data/repository/mock/mock_rides_repository.dart';
 import 'service/locations_service.dart';
@@ -11,7 +11,7 @@ import 'service/ride_prefs_service.dart';
 import 'ui/theme/theme.dart';
 
 void main() {
-  // 1 - Initialize the services
+  // 1 - Initialize tche services
   // RidePrefService.initialize(MockRidePreferencesRepository());
   LocationsService.initialize(MockLocationsRepository());
   RidesService.initialize(MockRidesRepository());
