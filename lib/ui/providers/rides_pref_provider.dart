@@ -27,7 +27,7 @@ class RidesPrefProvider extends ChangeNotifier {
     // add only the ride pref that doesn't exist in repo
     final preferences = await repository.getPastPreferences();
     if (!preferences.contains(ridePref)) {
-      repository.addPreference(ridePref);
+      await repository.addPreference(ridePref);
       await fetchPastPreference();
     }
     notifyListeners();

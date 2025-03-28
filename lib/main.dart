@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:week_3_blabla_project/data/local/local_ride_preferences_repository.dart';
 import 'package:week_3_blabla_project/ui/providers/rides_pref_provider.dart';
 import 'data/repository/mock/mock_locations_repository.dart';
 import 'data/repository/mock/mock_rides_repository.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider<RidesPrefProvider>(
               create: (context) => RidesPrefProvider(
-                  repository: MockRidePreferencesRepository())),
+                  repository: LocalRidePreferencesRepository())),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
